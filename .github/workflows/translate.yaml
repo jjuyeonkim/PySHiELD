@@ -27,11 +27,13 @@ jobs:
       - name: external trigger Checkout pySHiELD
         if: ${{inputs.component_trigger}}
         uses: actions/checkout@v4
+        # TODO: Revert tests back to GFDL (not jjuyeonkim) after merging
+        # https://github.com/NOAA-GFDL/NDSL/issues/64
         with:
           submodules: 'recursive'
-          repository: NOAA-GFDL/PySHiELD
+          repository: jjuyeonkim/PySHiELD
           path: pySHiELD
-          ref: develop
+          ref: 20250820_namelist_1
 
       - name: Checkout hash that triggered CI
         uses: actions/checkout@v4
