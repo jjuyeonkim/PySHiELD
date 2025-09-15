@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main # ... when merging into the main branch
+      - 20250908_namelist_4_CI_TEST
 
 jobs:
   pace_unit_tests:
