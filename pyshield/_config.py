@@ -5,9 +5,10 @@ from enum import Enum, unique
 from typing import List, Optional, Tuple
 
 import f90nml
-from dacite import Config, from_dict
+from dacite import Config as DaciteConfig, from_dict # TODO: better alternatives to DaciteConfig?
 
 from ndsl import MetaEnumStr
+from ndsl.config import Config, register_config
 from ndsl.utils import f90nml_as_dict
 
 
@@ -28,8 +29,9 @@ class PHYSICS_PACKAGES(Enum, metaclass=MetaEnumStr):
     GFS_microphysics = "GFS_microphysics"
 
 
-@dataclasses.dataclass
-class PhysicsConfig:
+@register_config("PhysicsConfig")
+@dataclasses.dataclass(kw_only=True)  # TODO: Is kw_only necessary?
+class PhysicsConfig(Config):
     dt_atmos: int = DEFAULT_INT
     hydrostatic: bool = DEFAULT_BOOL
     npx: int = DEFAULT_INT
@@ -210,7 +212,7 @@ class PhysicsConfig:
         # NOTE: We're setting strict to False so that extra keys in the data are
         # ignored. Eventually, we'd like to turn this to True once we move away from
         # expecting dicts that are basically flattened f90nml files.
-        dacite_config = Config(
+        dacite_config = DaciteConfig(
             strict=False,
             type_hooks={
                 Tuple[int, int]: lambda x: tuple(x),
